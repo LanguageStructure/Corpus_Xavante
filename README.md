@@ -50,7 +50,9 @@ Uma página informativa está preparada em `docs/index.html` para GitHub Pages. 
 
 Gerardi, Fabrício Ferraz; Toribio, Luas; Roksandic, Yvan. 2026. *Corpus Xavante (CorXav)*. Versão 0.1. Repositório de pesquisa.
 
-**DOI:** a atribuir após depósito no Zenodo. Não citar um DOI antes de sua confirmação.
+**DOI da versão 0.1:** [10.5281/zenodo.23244728](https://doi.org/10.5281/zenodo.23244728).
+
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23244728.svg)](https://doi.org/10.5281/zenodo.23244728)
 
 ## Licenciamento e acesso
 
