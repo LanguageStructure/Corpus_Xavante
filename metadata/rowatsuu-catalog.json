@@ -1,0 +1,32 @@
+{
+  "description": "Catálogo bibliográfico; publicação integral depende de confirmação de direitos de reprodução.",
+  "texts": [
+    {
+      "id": "rowatsuu-1",
+      "title": "A'uwe na Rowatsu'u 1",
+      "author": "Jerônimo Tsawê",
+      "year": 2005,
+      "edition": "2ª edição experimental",
+      "language": "xav",
+      "source_id": "AX-0037",
+      "status": "extração e revisão pendentes",
+      "translation_status": "a produzir",
+      "public_text": false
+    },
+    {
+      "id": "rowatsuu-2",
+      "title": "A'uwe na Rowatsu'u 2",
+      "author": "Jerônimo Tsawê",
+      "year": 2005,
+      "edition": "2ª edição experimental",
+      "publisher": "Editora UCDB",
+      "place": "Campo Grande, MS",
+      "language": "xav",
+      "source_id": "AX-0038",
+      "source_pages": 116,
+      "status": "extração automática não revisada",
+      "translation_status": "a produzir",
+      "public_text": false
+    }
+  ]
+}
