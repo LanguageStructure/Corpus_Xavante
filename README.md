@@ -12,6 +12,7 @@ Esta versão documenta a estrutura inicial do corpus e o fluxo de edição. **N�
 
 - **Meu Mundo:** conjunto de textos trabalhados em paralelo, com campos em xavante e português.
 - **A'uwe na Rowatsu'u 1** (Jerônimo Tsawê, 2005, 2ª edição experimental): fonte monolíngue em preparação para revisão do xavante e tradução com falante nativo. O texto extraído automaticamente exige conferência com o original.
+- **A'uwe na Rowatsu'u 2** (Jerônimo Tsawê, 2005, 2ª edição experimental, Editora UCDB): fonte catalogada para extração, revisão e tradução progressivas. Os dois volumes constam em `metadata/rowatsuu-catalog.json`.
 - **Editor local:** duas colunas editáveis. O campo português pode começar vazio, com placeholder visual; textos parcialmente traduzidos podem ser salvos. O original deve ser preservado separadamente da versão corrigida.
 - **Busca e revisão:** ocorrências devem ser inspecionáveis antes de substituições, com backups das edições.
 
