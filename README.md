@@ -44,7 +44,9 @@ Os diretórios `data/` e `data/parallel/`, quando presentes em instalações de 
 
 ## Página do projeto
 
-Uma página informativa está preparada em `docs/index.html` para GitHub Pages. Ela descreve o projeto, **sem reproduzir o conteúdo dos livros ou os dados de trabalho**. A ativação do Pages requer configuração do repositório.
+**Site público (GitHub Pages):** https://languagestructure.github.io/Corpus_Xavante/
+
+O site é publicado a partir de `docs/index.html` e apresenta o projeto **sem reproduzir o conteúdo dos livros ou os dados de trabalho**.
 
 ## Citação
 
