@@ -1,60 +1,61 @@
 # Corpus Xavante (CorXav)
 
-Corpus textual e linguístico da língua xavante (A'uwẽ), desenvolvido para documentação, pesquisa linguística e produção de recursos digitais.
+Corpus textual e linguístico da língua xavante (A'uwẽ), voltado à documentação, à pesquisa linguística e à produção de recursos digitais, com revisão e tradução em colaboração com falantes.
 
-**Autores:** Fabrício Ferraz Gerardi · Luas Toribio · Yvan Roksandic
+**Autores do projeto:** Fabrício Ferraz Gerardi · Luas Toribio · Yvan Roksandic.
 
-## Objetivos
+## Versão 0.1 — versão inicial de trabalho
 
-O CorXav reúne textos com proveniência documentada e permite acrescentar traduções, segmentação, análises morfológicas e anotações sintáticas progressivamente. Diferentemente do [Corpus Bororo](https://github.com/LanguageStructure/Bororo-Corpus), **a inclusão de textos não depende de anotação CoNLL-U**.
+Esta versão documenta a estrutura inicial do corpus e o fluxo de edição. **Não representa uma edição linguística validada nem a publicação irrestrita dos textos.** A disponibilização pública de cada documento depende da verificação de autoria, direitos e autorização de uso.
 
-## Princípios
+## Materiais e fluxo de trabalho
 
-- Preservar o texto original e registrar sua fonte, versão, ortografia e condições de uso.
-- Atribuir identificadores persistentes a documentos e segmentos.
-- Manter separadas as camadas de texto, tradução, segmentação, glosas e análise UD.
-- Registrar o estado de revisão de cada camada; não apresentar anotações automáticas como validadas.
-- Respeitar autoria indígena, consentimento e restrições de acesso determinadas pelos detentores dos materiais.
-- Publicar apenas materiais cuja divulgação esteja autorizada.
+- **Meu Mundo:** conjunto de textos trabalhados em paralelo, com campos em xavante e português.
+- **A'uwe na Rowatsu'u 1** (Jerônimo Tsawê, 2005, 2ª edição experimental): fonte monolíngue em preparação para revisão do xavante e tradução com falante nativo. O texto extraído automaticamente exige conferência com o original.
+- **Editor local:** duas colunas editáveis. O campo português pode começar vazio, com placeholder visual; textos parcialmente traduzidos podem ser salvos. O original deve ser preservado separadamente da versão corrigida.
+- **Busca e revisão:** ocorrências devem ser inspecionáveis antes de substituições, com backups das edições.
 
-## Organização
+A inclusão de documentos **não depende** de análise CoNLL-U. Traduções, segmentação, glosas, morfologia e análise UD são camadas incrementais e independentes.
+
+## Estrutura do repositório
 
 ```text
 Corpus_Xavante/
 ├── README.md
+├── docs/                  # página informativa, sem textos restritos
 ├── metadata/
-│   └── README.md
 ├── sources/
-│   └── README.md
 ├── texts/
-│   └── README.md
 ├── translations/
-│   └── README.md
 ├── annotations/
-│   └── README.md
 └── ud/
-    └── README.md
 ```
 
-## Fluxo de trabalho
+Os diretórios `data/` e `data/parallel/`, quando presentes em instalações de trabalho, podem conter arquivos de edição; sua presença não implica autorização para publicação.
 
-1. Identificar a fonte, os participantes, os direitos e a autorização de uso.
-2. Registrar o documento original sem alterar seu conteúdo.
-3. Preparar texto digital e segmentação com identificadores estáveis.
-4. Alinhar traduções quando disponíveis.
-5. Adicionar análises linguísticas em arquivos separados, com indicação de autoria e revisão.
-6. Exportar subconjuntos adequados para CoNLL-U / Universal Dependencies, sem exigir que todo o corpus esteja anotado.
+## Princípios de documentação
 
-## Estado do projeto
+1. Registrar proveniência, referência bibliográfica, autoria, ortografia, versão e condições de acesso.
+2. Preservar fontes e extrações originais, distinguindo-as de correções humanas.
+3. Permitir revisão do xavante e tradução portuguesa progressivas, inclusive com campos vazios.
+4. Registrar revisores, datas e estado de validação, sem apresentar resultados automáticos como revisados.
+5. Manter separadas as camadas textual, tradutória e linguística.
+6. Respeitar decisões dos autores e das comunidades quanto ao acesso e à redistribuição.
 
-**Fase inicial (2026).** A infraestrutura está em preparação; não há estatísticas ou cobertura de anotação publicadas nesta versão.
+## Página do projeto
 
-## Citação e licença
+Uma página informativa está preparada em `docs/index.html` para GitHub Pages. Ela descreve o projeto, **sem reproduzir o conteúdo dos livros ou os dados de trabalho**. A ativação do Pages requer configuração do repositório.
 
-Citação provisória: Gerardi, Fabrício Ferraz; Toribio, Luas; Roksandic, Yvan. *Corpus Xavante (CorXav)*. Repositório de pesquisa, 2026.
+## Citação
 
-A licença de código e as condições de distribuição dos dados serão definidas separadamente, conforme a proveniência e as autorizações específicas. A presença de um arquivo no repositório não implica permissão para redistribuição irrestrita.
+Gerardi, Fabrício Ferraz; Toribio, Luas; Roksandic, Yvan. 2026. *Corpus Xavante (CorXav)*. Versão 0.1. Repositório de pesquisa.
 
-## Contato e contribuições
+**DOI:** a atribuir após depósito no Zenodo. Não citar um DOI antes de sua confirmação.
 
-Contribuições de textos e correções devem incluir a fonte e a situação de autorização. Discussões metodológicas podem ser abertas nas Issues do repositório.
+## Licenciamento e acesso
+
+Licenças de software e condições de distribuição dos dados devem ser tratadas separadamente. A versão 0.1 não atribui licença aberta aos textos por omissão. Não publique os materiais de origem ou suas transcrições antes de verificar os direitos e as autorizações pertinentes.
+
+## Contribuições
+
+Correções, traduções e anotações devem registrar a fonte, os participantes, a revisão e as condições de divulgação.
