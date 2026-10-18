@@ -1,0 +1,57 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>CorXav · Editor permanente</title><style>
+:root{font:16px system-ui,Arial;color:#253b32;background:#f5f3ed}*{box-sizing:border-box}body{margin:0}header{background:#25483b;color:white;padding:18px 3vw}h1{font:29px Georgia;margin:0}header p{margin:5px 0;color:#d4e1d8}main{padding:18px 3vw;max-width:1700px;margin:auto}nav{display:flex;gap:12px;align-items:end;flex-wrap:wrap;margin-bottom:14px}label{display:block;font-size:14px}select,input,button,textarea{font:inherit}select,input{display:block;padding:9px;border:1px solid #bac8be;border-radius:5px;background:white;min-width:260px;max-width:100%}button{padding:9px 14px;border:1px solid #729485;border-radius:5px;background:white;cursor:pointer}button.primary{background:#25483b;color:white}button:disabled{opacity:.5;cursor:default}#status{padding:10px 0;color:#375a49}#linhas{display:grid;gap:12px}.linha{background:white;border:1px solid #d9dfd8;border-radius:8px;padding:14px}.linha header{background:none;color:#687b70;padding:0;margin-bottom:9px;font-size:13px}.cols{display:grid;grid-template-columns:1fr 1fr;gap:14px}textarea{width:100%;min-height:90px;resize:vertical;padding:10px;border:1px solid #cbd5cf;border-radius:5px;line-height:1.5}.notice{font-size:13px;color:#687b70}.modified{border-color:#d4a647;background:#fffdf4}a{color:#25483b}@media(max-width:750px){.cols{grid-template-columns:1fr}select,input{min-width:180px}}</style></head><body>
+<header><h1>CorXav · Editor do corpus</h1><p>Edição direta dos textos xavante–português · ambiente local</p></header><main><nav><label>Obra<select id="obra"></select></label><label>Filtrar trechos<input id="filtro" placeholder="Xavante, português ou página"></label><button id="salvar" class="primary" disabled>Salvar alterações</button><button id="recarregar">Recarregar corpus</button><button id="substituir">Buscar e substituir na obra</button><button id="exportar">Exportar revisões JSON</button><a href="/leitura/" target="_blank">Abrir leitor ↗</a></nav>
+<div class="notice">As narrativas aparecem integralmente, divididas em unidades editáveis. Salvar modifica o arquivo local <code>docs/leitura/dados.json</code>, com backup automático. Os arquivos CoNLL-U não são atualizados automaticamente.</div><div id="status" role="status">Carregando corpus…</div><div id="linhas"></div></main><script>
+const $=id=>document.getElementById(id);let textos=[],changes=new Map();const norm=s=>String(s??'').toLocaleLowerCase();
+function status(s){$('status').textContent=s}
+function autosize(el){el.style.height='auto';el.style.height=Math.max(90,el.scrollHeight+4)+'px'}
+function obras(){return [...new Set(textos.map(t=>t.obra))]}
+function render(){let obra=$('obra').value,q=norm($('filtro').value);$('linhas').replaceChildren();let n=0;for(let i=0;i<textos.length;i++){
+ const t=textos[i];if(t.obra!==obra)continue;let edit=changes.get(i)||{xav:t.xav||'',por:t.por||''};if(q&&!norm([t.pagina,edit.xav,edit.por].join(' ')).includes(q))continue;n++;
+ let section=document.createElement('section');section.className='linha'+(changes.has(i)?' modified':'');let heading=document.createElement('header');heading.textContent='Unidade '+(t.id??i)+' · Página '+(t.pagina??'—');section.append(heading);
+ let cols=document.createElement('div');cols.className='cols';for(const [key,label] of [['xav','Xavante'],['por','Português']]){let box=document.createElement('div'),l=document.createElement('label');l.textContent=label;let ta=document.createElement('textarea');ta.value=edit[key];ta.setAttribute('aria-label',label+' unidade '+i);ta.oninput=()=>{let val=changes.get(i)||{xav:t.xav||'',por:t.por||''};val[key]=ta.value;if(val.xav===(t.xav||'')&&val.por===(t.por||'')){changes.delete(i);section.classList.remove('modified')}else{changes.set(i,val);section.classList.add('modified')}update();autosize(ta)};l.append(ta);box.append(l);cols.append(box);setTimeout(()=>autosize(ta),0)}section.append(cols);$('linhas').append(section)}status(n+' unidades exibidas · '+changes.size+' modificadas.');update()}
+function update(){$('salvar').disabled=!changes.size}
+async function carregar(){if(changes.size&&!confirm('Descartar alterações não salvas?'))return;let obra=$('obra').value;try{const r=await fetch('/api/textos',{cache:'no-store'});if(!r.ok)throw Error('HTTP '+r.status);textos=await r.json();changes.clear();$('obra').replaceChildren();for(let o of obras()){let op=document.createElement('option');op.value=o;op.textContent=o;$('obra').append(op)}if(obras().includes(obra))$('obra').value=obra;render()}catch(e){status('Erro ao carregar: '+e.message)}}
+$('obra').onchange=render;$('filtro').oninput=render;$('recarregar').onclick=carregar;
+$('salvar').onclick=async()=>{if(!changes.size)return;let alteracoes=[...changes].map(([indice,v])=>({indice,id:textos[indice].id,obra:textos[indice].obra,anterior_xav:textos[indice].xav||'',anterior_por:textos[indice].por||'',xav:v.xav,por:v.por}));$('salvar').disabled=true;try{let r=await fetch('/api/salvar',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({alteracoes})});let result=await r.json();if(!r.ok)throw Error(result.erro||'Erro');for(const item of alteracoes){textos[item.indice].xav=item.xav;textos[item.indice].por=item.por}changes.clear();render();status('Salvas '+result.salvas+' unidades. Backup: '+result.backup+'. Atualize o leitor para ver as correções.')}catch(e){status('Não foi possível salvar: '+e.message);update()}};
+$('substituir').onclick=()=>{
+ const obra=$('obra').value;
+ const busca=prompt('Texto exato a localizar na obra selecionada (apenas Xavante):');
+ if(!busca)return;
+ const troca=prompt('Substituir por (somente campo Xavante):');
+ if(troca===null||troca===busca)return;
+ const alvos=[];let total=0;
+ for(let i=0;i<textos.length;i++){
+   const t=textos[i];if(t.obra!==obra)continue;
+   const v=changes.get(i)||{xav:t.xav||'',por:t.por||''};
+   const vezes=v.xav.split(busca).length-1;
+   if(vezes){alvos.push({i,v,vezes});total+=vezes}
+ }
+ if(!total){status('Nenhuma ocorrência encontrada em '+obra);return}
+ const exemplos=alvos.slice(0,8).map(x=>{
+   const pos=x.v.xav.indexOf(busca);
+   return 'Unidade '+(textos[x.i].id??x.i)+': …'+x.v.xav.slice(Math.max(0,pos-25),pos+busca.length+25).replace(/\s+/g,' ')+'…';
+ }).join('\n');
+ if(!confirm('Obra: '+obra+'\n'+total+' ocorrência(s) em '+alvos.length+' unidade(s).\n\n'+exemplos+'\n\nAplicar substituição apenas no Xavante? (Ainda será necessário salvar.)'))return;
+ for(const {i,v} of alvos){
+   const xav=v.xav.split(busca).join(troca);
+   if(xav===(textos[i].xav||'')&&v.por===(textos[i].por||''))changes.delete(i);
+   else changes.set(i,{xav,por:v.por});
+ }
+ render();status(total+' substituições preparadas em '+alvos.length+' unidades. Confira e clique em Salvar alterações.');
+};
+$('exportar').onclick=()=>{
+ const obra=$('obra').value;
+ const revisoes=[...changes].filter(([i])=>textos[i].obra===obra).map(([i,v])=>({
+   indice:i,id:textos[i].id,obra:textos[i].obra,pagina:textos[i].pagina,
+   anterior_xav:textos[i].xav||'',anterior_por:textos[i].por||'',xav:v.xav,por:v.por
+ }));
+ if(!revisoes.length){status('Não há alterações pendentes para exportar nesta obra.');return}
+ const blob=new Blob([JSON.stringify({tipo:'corxav-revisoes-pendentes',obra,revisoes},null,2)],{type:'application/json'});
+ const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;
+ a.download='corxav-revisoes-'+new Date().toISOString().slice(0,10)+'.json';a.click();
+ setTimeout(()=>URL.revokeObjectURL(url),2000);
+ status(revisoes.length+' unidades exportadas. A exportação não substitui o salvamento no corpus.');
+};
+window.addEventListener('beforeunload' ,e=>{if(changes.size){e.preventDefault();e.returnValue=''}});carregar();
+</script></body></html>

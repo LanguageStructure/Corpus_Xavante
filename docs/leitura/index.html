@@ -1,10 +1,34 @@
 <!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>CorXav · Leitura</title><style>
 :root{font:16px system-ui,Arial;color:#253b32;background:#f5f3ed}*{box-sizing:border-box}body{margin:0}header{background:#25483b;color:#fff;padding:19px 3vw}h1{font:30px Georgia;margin:0}header p{margin:5px 0;color:#d4e1d8}main{display:grid;grid-template-columns:245px minmax(340px,1fr) 315px;gap:15px;padding:17px;max-width:1800px;margin:auto}aside,article{background:white;border:1px solid #d9dfd8;border-radius:8px;padding:17px;min-width:0}h2{font:23px Georgia;margin:0 0 12px}select,input,button{font:inherit;padding:8px;border:1px solid #bac8be;border-radius:5px;background:white;max-width:100%}select,input{width:100%;margin-bottom:12px}button{cursor:pointer}.entry{display:block;width:100%;text-align:left;border:0;border-bottom:1px solid #edf0eb;border-radius:0;padding:9px 5px}.entry:hover,.entry.active{background:#e8efe8}.reading{display:grid;grid-template-columns:1fr 1fr;gap:16px}.text{font:18px/1.8 Georgia;white-space:pre-wrap;overflow-wrap:anywhere}.token{cursor:pointer;border-radius:3px}.token:hover,.token.selected{background:#f2dfa7}.meta{font-size:13px;color:#687b70}.definition{border-bottom:1px solid #e3e9e2;padding:10px 0}.badge{font-size:12px;color:#845d17;background:#fff1cf;padding:3px 6px;border-radius:4px}.hit{padding:8px 0;border-bottom:1px solid #eee;font:15px/1.5 Georgia}.hidden{display:none}@media(max-width:1100px){main{grid-template-columns:210px 1fr}#panel{grid-column:2}}@media(max-width:700px){main{display:block;padding:10px}aside,article{margin-bottom:12px}.reading{grid-template-columns:1fr}}
-.related-note{font-size:13px;color:#687b70}.pager{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:10px 0}.pager button{padding:5px 9px}.pager button:disabled{opacity:.4;cursor:default}.related-entry{font-size:14px}.related-entry small{display:block;color:#687b70}</style></head><body><header><h1>CorXav · Leitura do corpus</h1><p>Textos xavante–português · consulta lexical com indicação de proveniência</p></header><main><aside><h2>Textos</h2><label for="obra">Obra</label><select id="obra"></select><label for="filtro">Filtrar páginas</label><input id="filtro" placeholder="Página ou trecho"><div id="lista"></div></aside><article><h2 id="titulo">Selecione um texto</h2><div class="meta" id="aviso">As palavras são clicáveis. Correspondências lexicais exatas não equivalem a análises morfológicas.</div><div class="reading"><section><h2>Xavante</h2><div id="xav" class="text"></div></section><section><h2>Português</h2><div id="por" class="text"></div></section></div></article><aside id="panel"><h2>Consulta lexical</h2><input id="busca" placeholder="Pesquisar forma xavante"><div id="lex">Clique em uma palavra xavante ou digite uma forma.</div><h2 style="margin-top:20px">Ocorrências em contexto</h2><div id="ocorrencias"></div></aside></main><script>
+.related-note{font-size:13px;color:#687b70}.pager{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:10px 0}.pager button{padding:5px 9px}.pager button:disabled{opacity:.4;cursor:default}.related-entry{font-size:14px}.related-entry small{display:block;color:#687b70}.lex-detail{font-size:13px;color:#435c50;margin-top:5px}.lex-definition{margin:7px 0;line-height:1.5}.lex-status,.lex-source{font-size:12px;color:#687b70;margin-top:5px}.lex-source{font-style:italic}.lex-help{font-size:12px;color:#687b70;margin:5px 0 12px} </style></head><body><header><h1>CorXav · Leitura do corpus</h1><p>Textos xavante–português · consulta lexical com indicação de proveniência</p></header><main><aside><h2>Textos</h2><label for="obra">Obra</label><select id="obra"></select><label for="filtro">Filtrar páginas</label><input id="filtro" placeholder="Página ou trecho"><div id="lista"></div></aside><article><h2 id="titulo">Selecione um texto</h2><div class="meta" id="aviso">As palavras são clicáveis. Correspondências lexicais exatas não equivalem a análises morfológicas.</div><div class="reading"><section><h2>Xavante</h2><div id="xav" class="text"></div></section><section><h2>Português</h2><div id="por" class="text"></div></section></div></article><aside id="panel"><h2>Consulta lexical</h2><input id="busca" placeholder="Pesquisar forma xavante"><p class="lex-help">Correspondências exatas e sugestões gráficas são distintas. Os registros ainda não passaram por revisão lexicográfica.</p><div id="lex">Clique em uma palavra xavante ou digite uma forma.</div><h2 style="margin-top:20px">Ocorrências em contexto</h2><div id="ocorrencias"></div></aside></main><script>
 let data={textos:[],lexico:[]},current=null,selected='';const $=id=>document.getElementById(id);const norm=s=>String(s ?? '').toLocaleLowerCase().replace(/’/g,"'");const words=s=>s.match(/[\p{L}\p{M}]+(?:['-][\p{L}\p{M}]+)*/gu)||[];const safe=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-function showList(){const o=$('obra').value,q=norm($('filtro').value);$('lista').replaceChildren();for(const t of data.textos.filter(t=>t.obra===o&&(!q||norm(t.pagina+' '+t.xav+' '+t.por).includes(q)))){let b=document.createElement('button');b.className='entry'+(current===t?' active':'');b.textContent='Página '+t.pagina;b.onclick=()=>openText(t);$('lista').append(b)}}
+// CORXAV_NARRATIVAS_AGRUPADAS_V1: agrupar apenas na interface, sem modificar os registros.
+function isNarrativa(t){return String(t.obra||'').startsWith('Narrativas tradicionais — ')}
+function groupNarrative(t){
+  const rows=data.textos.filter(x=>x.obra===t.obra);
+  const pages=[...new Set(rows.map(x=>String(x.pagina||'')).filter(Boolean))];
+  return {id:'group:'+t.obra,obra:t.obra,pagina:pages.join(', '),
+    xav:rows.map(x=>x.xav||'').join('\n'),por:rows.map(x=>x.por||'').join('\n'),
+    unidades:rows.length};
+}
+function showList(){
+  const o=$('obra').value,q=norm($('filtro').value);$('lista').replaceChildren();
+  if(o.startsWith('Narrativas tradicionais — ')){
+    const first=data.textos.find(t=>t.obra===o);
+    if(!first)return;
+    const t=groupNarrative(first);
+    if(q&&!norm(t.pagina+' '+t.xav+' '+t.por).includes(q))return;
+    const b=document.createElement('button');b.className='entry'+(current&&current.obra===o?' active':'');
+    b.textContent='Conto completo · '+t.unidades+' linhas · páginas '+t.pagina;
+    b.onclick=()=>openText(t);$('lista').append(b);return;
+  }
+  for(const t of data.textos.filter(t=>t.obra===o&&(!q||norm(t.pagina+' '+t.xav+' '+t.por).includes(q)))){
+    const b=document.createElement('button');b.className='entry'+(current===t?' active':'');
+    b.textContent='Página '+t.pagina;b.onclick=()=>openText(t);$('lista').append(b);
+  }
+}
 function tokenize(s){const f=document.createDocumentFragment();const re=/[\p{L}\p{M}]+(?:['-][\p{L}\p{M}]+)*/gu;let m,last=0;while((m=re.exec(s))){f.append(document.createTextNode(s.slice(last,m.index)));let span=document.createElement('span');span.className='token';span.textContent=m[0];span.title='Consultar '+m[0];const palavra=m[0];span.onclick=()=>lookup(palavra);f.append(span);last=re.lastIndex}f.append(document.createTextNode(s.slice(last)));return f}
-function openText(t){current=t;$('titulo').textContent=t.obra+' · Página '+t.pagina;$('xav').replaceChildren(tokenize(t.xav));$('por').textContent=t.por;showList();highlight()}
+function openText(t){if(isNarrativa(t)&&!t.unidades)t=groupNarrative(t);current=t;$('titulo').textContent=t.obra.startsWith('Narrativas tradicionais') ? t.obra : t.obra+' · Página '+t.pagina;$('xav').replaceChildren(tokenize(t.xav));$('por').textContent=t.por;showList();highlight()}
 function highlight(){document.querySelectorAll('.token').forEach(e=>e.classList.toggle('selected',norm(e.textContent)===norm(selected)))}
 const PAGE_SIZE=50;
 let concordanceHits=[];
@@ -113,7 +137,14 @@ function lookup(form) {
   }
   for(const x of matches){
     const d=document.createElement('div');d.className='definition';
-    d.innerHTML='<strong>'+safe(x.lema)+'</strong> <small>'+safe(x.classe||'')+'</small><br>'+safe(x.definicao||'')+'<br><span class="badge">Dicionário · extração não revisada</span>';
+    const lemma=document.createElement('strong');lemma.textContent=x.lema||'';d.append(lemma);
+    if(x.classe){const cls=document.createElement('small');cls.textContent=' · '+x.classe;d.append(cls)}
+    if(x.pronuncia){const pron=document.createElement('div');pron.className='lex-detail';pron.textContent='Pronúncia registrada: '+x.pronuncia;d.append(pron)}
+    const definition=document.createElement('div');definition.className='lex-definition';definition.textContent=x.definicao||'Definição não disponível';d.append(definition);
+    const status=document.createElement('div');status.className='lex-status';
+    status.textContent='Estado do registro: '+(x.estado||'não informado');d.append(status);
+    const source=document.createElement('div');source.className='lex-source';
+    source.textContent='Proveniência: base lexical provisória do CorXav; referência bibliográfica individual não informada neste registro.';d.append(source);
     panel.append(d);
   }
   concordanceHits=[];concordancePage=0;concordanceFilter='';
