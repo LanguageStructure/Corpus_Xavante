@@ -1,0 +1,9 @@
+# Arquivos temporários e cópias locais
+.DS_Store
+__pycache__/
+*.pyc
+*.backup*
+*.bak
+*.tmp
+# Arquivos de edição/exportação gerados localmente
+narrativas_editor.jsonl
