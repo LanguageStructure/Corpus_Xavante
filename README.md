@@ -13,8 +13,7 @@ A versão 0.2.0 amplia o acervo de trabalho com **sete narrativas tradicionais**
 - Sete narrativas tradicionais incorporadas ao conjunto de dados do leitor.
 - Leitura contínua dos contos em paralelo xavante–português.
 - Consulta lexical por clique nas palavras xavante, busca de formas e ocorrências em contexto.
-- Editor permanente **local**, com edição dos segmentos em xavante e português e salvamento no arquivo de trabalho.
-- Busca e substituição no fluxo de revisão local; preservação de cópias de segurança.
+- Leitura pública separada das ferramentas privadas de revisão e edição.
 - Rascunhos TSV e CoNLL-U preparados para anotação posterior; **não constituem um treebank UD validado**.
 - Normalização inicial de `ò → o` e `è → e` no texto xavante das narrativas, com preservação das fontes originais.
 
@@ -23,24 +22,11 @@ Consulte [CHANGELOG.md](CHANGELOG.md) para o histórico de versões.
 ## Organização e acesso
 
 - **Leitor:** `docs/leitura/index.html`; dados de leitura em `docs/leitura/dados.json`.
-- **Editor local permanente:** `tools/editor_local/editor_corxav.html` e `tools/editor_local/servidor_corxav.py`.
-- **Editor inicial:** `editor/index.html`, com importação/exportação e armazenamento no navegador.
 - **Metadados e materiais de pesquisa:** `metadata/`, `sources/`, `texts/`, `translations/`, `annotations/` e `ud/`, conforme disponíveis no repositório.
 
-### Executar o editor permanente
+### Separação entre site público e edição privada
 
-Requer Python 3.9 ou superior. Na raiz do repositório:
-
-```bash
-python3 tools/editor_local/servidor_corxav.py
-```
-
-O serviço local utiliza a porta 8765. Se ela já estiver ocupada, encerre o servidor anterior antes de iniciar este. Abra no navegador:
-
-- Editor: `http://127.0.0.1:8765/editor/`
-- Leitor: `http://127.0.0.1:8765/leitura/`
-
-O editor altera o arquivo de trabalho `docs/leitura/dados.json` **no computador onde o serviço está sendo executado**. Faça cópias de segurança e revise as alterações antes de incorporá-las ao repositório. O GitHub Pages é estático e **não oferece salvamento no servidor**.
+O site e o repositório públicos disponibilizam os materiais de consulta e leitura. **As ferramentas de edição não são distribuídas neste repositório.** O editor deve ser mantido em uma pasta privada, fora do clone Git público, com backups independentes. Visitantes do site não podem salvar alterações no corpus publicado.
 
 ## Fontes, transcrição e anotação
 
