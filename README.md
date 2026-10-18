@@ -62,7 +62,9 @@ Gerardi, Fabrício Ferraz; Toribio, Luas; Roksandic, Yvan. 2026. *Corpus Xavante
 
 **DOI da versão 0.1:** https://doi.org/10.5281/zenodo.23244728
 
-**DOI da versão 0.2.0:** a inserir após confirmação da publicação no Zenodo. Não reutilizar o DOI específico da versão 0.1 para identificar a versão 0.2.0.
+**DOI da versão 0.2.0:** https://doi.org/10.5281/zenodo.23457736
+
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23457736.svg)](https://doi.org/10.5281/zenodo.23457736)
 
 ## Licenciamento e responsabilidades
 
