@@ -7,3 +7,9 @@ __pycache__/
 *.tmp
 # Arquivos de edição/exportação gerados localmente
 narrativas_editor.jsonl
+
+# Ferramentas privadas de edição — não versionar neste repositório
+/editor/
+/tools/editor_local/
+/servidor_corxav.py
+/editor_corxav.html
