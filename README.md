@@ -1,66 +1,71 @@
 # Corpus Xavante (CorXav)
 
-Corpus textual e linguístico da língua xavante (A'uwẽ), voltado à documentação, à pesquisa linguística e à produção de recursos digitais, com revisão e tradução em colaboração com falantes.
+Corpus textual e linguístico da língua xavante (A’uwẽ), voltado à documentação, pesquisa linguística e produção de recursos digitais, com revisão e tradução em colaboração com falantes.
 
-**Autores do projeto:** Fabrício Ferraz Gerardi · Luas Toribio · Yvan Roksandic.
+**Autores:** Fabrício Ferraz Gerardi · Luas Toribio · Yvan Roksandic.
 
-## Versão 0.1 — versão inicial de trabalho
+## Versão 0.2.0 — ampliação do corpus (18 de outubro de 2026)
 
-Esta versão documenta a estrutura inicial do corpus e o fluxo de edição. **Não representa uma edição linguística validada nem a publicação irrestrita dos textos.** A disponibilização pública de cada documento depende da verificação de autoria, direitos e autorização de uso.
+A versão 0.2.0 amplia o acervo de trabalho com **sete narrativas tradicionais** (1.007 unidades de alinhamento preliminares), além dos materiais anteriormente incorporados de *Meu Mundo* e *A’uwe na Rowatsu’u*. As unidades das narrativas correspondem a segmentos de transcrição/glosa, **não necessariamente a sentenças**. Os textos, traduções e alinhamentos ainda exigem conferência e revisão linguística.
 
-## Materiais e fluxo de trabalho
+### Novidades
 
-- **Meu Mundo:** conjunto de textos trabalhados em paralelo, com campos em xavante e português.
-- **A'uwe na Rowatsu'u 1** (Jerônimo Tsawê, 2005, 2ª edição experimental): fonte monolíngue em preparação para revisão do xavante e tradução com falante nativo. O texto extraído automaticamente exige conferência com o original.
-- **A'uwe na Rowatsu'u 2** (Jerônimo Tsawê, 2005, 2ª edição experimental, Editora UCDB): fonte catalogada para extração, revisão e tradução progressivas. Os dois volumes constam em `metadata/rowatsuu-catalog.json`.
-- **Editor local:** duas colunas editáveis. O campo português pode começar vazio, com placeholder visual; textos parcialmente traduzidos podem ser salvos. O original deve ser preservado separadamente da versão corrigida.
-- **Busca e revisão:** ocorrências devem ser inspecionáveis antes de substituições, com backups das edições.
+- Sete narrativas tradicionais incorporadas ao conjunto de dados do leitor.
+- Leitura contínua dos contos em paralelo xavante–português.
+- Consulta lexical por clique nas palavras xavante, busca de formas e ocorrências em contexto.
+- Editor permanente **local**, com edição dos segmentos em xavante e português e salvamento no arquivo de trabalho.
+- Busca e substituição no fluxo de revisão local; preservação de cópias de segurança.
+- Rascunhos TSV e CoNLL-U preparados para anotação posterior; **não constituem um treebank UD validado**.
+- Normalização inicial de `ò → o` e `è → e` no texto xavante das narrativas, com preservação das fontes originais.
 
-A inclusão de documentos **não depende** de análise CoNLL-U. Traduções, segmentação, glosas, morfologia e análise UD são camadas incrementais e independentes.
+Consulte [CHANGELOG.md](CHANGELOG.md) para o histórico de versões.
 
-## Estrutura do repositório
+## Organização e acesso
 
-```text
-Corpus_Xavante/
-├── README.md
-├── docs/                  # página informativa, sem textos restritos
-├── metadata/
-├── sources/
-├── texts/
-├── translations/
-├── annotations/
-└── ud/
+- **Leitor:** `docs/leitura/index.html`; dados de leitura em `docs/leitura/dados.json`.
+- **Editor local permanente:** `tools/editor_local/editor_corxav.html` e `tools/editor_local/servidor_corxav.py`.
+- **Editor inicial:** `editor/index.html`, com importação/exportação e armazenamento no navegador.
+- **Metadados e materiais de pesquisa:** `metadata/`, `sources/`, `texts/`, `translations/`, `annotations/` e `ud/`, conforme disponíveis no repositório.
+
+### Executar o editor permanente
+
+Requer Python 3.9 ou superior. Na raiz do repositório:
+
+```bash
+python3 tools/editor_local/servidor_corxav.py
 ```
 
-Os diretórios `data/` e `data/parallel/`, quando presentes em instalações de trabalho, podem conter arquivos de edição; sua presença não implica autorização para publicação.
+O serviço local utiliza a porta 8765. Se ela já estiver ocupada, encerre o servidor anterior antes de iniciar este. Abra no navegador:
 
-## Princípios de documentação
+- Editor: `http://127.0.0.1:8765/editor/`
+- Leitor: `http://127.0.0.1:8765/leitura/`
 
-1. Registrar proveniência, referência bibliográfica, autoria, ortografia, versão e condições de acesso.
-2. Preservar fontes e extrações originais, distinguindo-as de correções humanas.
-3. Permitir revisão do xavante e tradução portuguesa progressivas, inclusive com campos vazios.
-4. Registrar revisores, datas e estado de validação, sem apresentar resultados automáticos como revisados.
-5. Manter separadas as camadas textual, tradutória e linguística.
-6. Respeitar decisões dos autores e das comunidades quanto ao acesso e à redistribuição.
+O editor altera o arquivo de trabalho `docs/leitura/dados.json` **no computador onde o serviço está sendo executado**. Faça cópias de segurança e revise as alterações antes de incorporá-las ao repositório. O GitHub Pages é estático e **não oferece salvamento no servidor**.
 
-## Página do projeto
+## Fontes, transcrição e anotação
 
-**Site público (GitHub Pages):** https://languagestructure.github.io/Corpus_Xavante/
+Os materiais incluem *Meu Mundo*, *A’uwe na Rowatsu’u* I e II e sete narrativas tradicionais. As narrativas foram extraídas de material interlinear e estão disponíveis como segmentos de trabalho; a glosa portuguesa não deve ser confundida com tradução livre validada.
 
-O site é publicado a partir de `docs/index.html` e apresenta o projeto **sem reproduzir o conteúdo dos livros ou os dados de trabalho**.
+As camadas de transcrição, normalização ortográfica, tradução, segmentação, glosa, morfologia e dependências sintáticas são independentes. A inclusão de textos **não depende** de análise CoNLL-U. A sincronização automática entre revisões do editor e arquivos CoNLL-U ainda não está implementada.
 
-## Citação
+Revisões devem preservar identificadores, proveniência, referência bibliográfica, ortografia de origem, participantes, data e estado de validação.
 
-Gerardi, Fabrício Ferraz; Toribio, Luas; Roksandic, Yvan. 2026. *Corpus Xavante (CorXav)*. Versão 0.1. Repositório de pesquisa.
+## Página pública e repositório
 
-**DOI da versão 0.1:** [10.5281/zenodo.23244728](https://doi.org/10.5281/zenodo.23244728).
+- Página do projeto: https://languagestructure.github.io/Corpus_Xavante/
+- Código e versões: https://github.com/LanguageStructure/Corpus_Xavante
+- Histórico de alterações: [CHANGELOG.md](CHANGELOG.md)
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23244728.svg)](https://doi.org/10.5281/zenodo.23244728)
+## Citação e DOI
 
-## Licenciamento e acesso
+Gerardi, Fabrício Ferraz; Toribio, Luas; Roksandic, Yvan. 2026. *Corpus Xavante (CorXav)*. Versão 0.2.0. Repositório de pesquisa.
 
-Licenças de software e condições de distribuição dos dados devem ser tratadas separadamente. A versão 0.1 não atribui licença aberta aos textos por omissão. Não publique os materiais de origem ou suas transcrições antes de verificar os direitos e as autorizações pertinentes.
+**DOI da versão 0.1:** https://doi.org/10.5281/zenodo.23244728
 
-## Contribuições
+**DOI da versão 0.2.0:** a inserir após confirmação da publicação no Zenodo. Não reutilizar o DOI específico da versão 0.1 para identificar a versão 0.2.0.
 
-Correções, traduções e anotações devem registrar a fonte, os participantes, a revisão e as condições de divulgação.
+## Licenciamento e responsabilidades
+
+A distribuição de textos e materiais deve respeitar autoria, direitos e autorizações pertinentes. A autorização de publicação das sete narrativas foi confirmada para esta etapa do projeto; isso não implica automaticamente licença aberta irrestrita para todo o acervo. Licenças de software e condições de reutilização dos dados devem ser definidas separadamente.
+
+A versão 0.2.0 é uma **versão de desenvolvimento**. Os materiais permanecem sujeitos a correções e validação linguística.
