@@ -4,19 +4,19 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Corpus Xavante (CorXav) — v0.2.0</title>
 <style>
-:root{--green:#25483b;--ink:#24332d;--muted:#60736a;--cream:#f6f3eb;--line:#d8dfd7}
+:root{--green:#25483b;--ink:#24332d;--muted:#60736a;--cream:#f6f3eb;--line:#d8dfd7;--red:#a53d3b}
 *{box-sizing:border-box}body{margin:0;background:var(--cream);color:var(--ink);font:16px/1.7 system-ui,-apple-system,Arial,sans-serif}a{color:#22645a}a:focus-visible{outline:3px solid #b17c3e;outline-offset:3px}
 header{background:var(--green);color:white;padding:56px max(24px,calc((100vw - 1060px)/2))}
 header .eyebrow{font-size:.82rem;letter-spacing:.14em;text-transform:uppercase;color:#cbded1}
 h1,h2,h3{font-family:Georgia,serif;font-weight:normal;line-height:1.25}h1{font-size:clamp(2.6rem,6vw,4.6rem);margin:12px 0}header p{font-size:1.18rem;max-width:750px;color:#e0eae2}
-header a{color:white}.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:25px}.button{display:inline-block;padding:10px 18px;border:1px solid #b9d0c2;border-radius:6px;text-decoration:none;font-weight:600}.button.primary{background:#fff;color:#25483b}
-main{max-width:1110px;margin:auto;padding:30px 24px}h2{font-size:1.9rem;margin:32px 0 14px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(255px,1fr));gap:16px}.card{background:white;border:1px solid var(--line);border-radius:10px;padding:22px}.card h3{font-size:1.3rem;margin:0 0 8px}.card p{margin:0 0 10px}.muted,small{color:var(--muted)}.notice{border-left:4px solid #a67c43;background:#fffaf0;padding:14px 18px}.pill{display:inline-block;border:1px solid #aac2b4;padding:3px 12px;border-radius:30px;font-size:.9rem}footer{border-top:1px solid var(--line);padding:25px 24px;text-align:center;color:var(--muted)}code{overflow-wrap:anywhere}
+header a{color:white}.accent-red{color:#efaaa0}.pill{border-color:#dc8b82}.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:25px}.button{display:inline-block;padding:10px 18px;border:1px solid #b9d0c2;border-radius:6px;text-decoration:none;font-weight:600}.button.primary{background:#fff;color:#25483b}
+main{max-width:1110px;margin:auto;padding:30px 24px}h2{font-size:1.9rem;margin:32px 0 14px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(255px,1fr));gap:16px}.card{background:white;border:1px solid var(--line);border-radius:10px;padding:22px}.card h3{font-size:1.3rem;margin:0 0 8px}.card h3::before{content:'';display:inline-block;width:7px;height:17px;background:var(--red);border-radius:2px;margin-right:9px;vertical-align:-2px}.card p{margin:0 0 10px}.muted,small{color:var(--muted)} .notice{border-left:4px solid var(--red);background:#fffaf0;padding:14px 18px}.pill{display:inline-block;border:1px solid #aac2b4;padding:3px 12px;border-radius:30px;font-size:.9rem}footer{border-top:1px solid var(--line);padding:25px 24px;text-align:center;color:var(--muted)}code{overflow-wrap:anywhere}
 </style>
 </head>
 <body>
 <header>
 <div class="eyebrow">Documentação linguística · Xavante / A’uwẽ</div>
-<h1>Corpus Xavante <span style="color:#c2d5c7">(CorXav)</span></h1>
+<h1>Corpus Xavante <span style="color:#efaaa0">(CorXav)</span></h1>
 <p>Acervo textual e ferramentas de leitura, consulta lexical, revisão e preparação de anotações linguísticas da língua xavante.</p>
 <span class="pill">Versão 0.2.0 · outubro de 2026</span>
 <div class="actions"><a class="button primary" href="./leitura/">Abrir o corpus e consultar textos</a><a class="button" href="https://github.com/LanguageStructure/Corpus_Xavante">Repositório e dados</a><a class="button" href="https://doi.org/10.5281/zenodo.23457736">DOI · v0.2.0</a></div>
