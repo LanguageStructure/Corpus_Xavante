@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Estatísticas · Corpus Xavante</title>
+<style>
+:root{--green:#25483b;--cream:#f6f3eb;--ink:#24332d;--muted:#60736a;--line:#d8dfd7}
+*{box-sizing:border-box}body{margin:0;background:var(--cream);color:var(--ink);font:16px/1.6 system-ui,Arial,sans-serif}
+header{background:var(--green);color:white;padding:38px max(22px,calc((100vw - 1050px)/2))}
+h1,h2{font-family:Georgia,serif;font-weight:normal}h1{font-size:clamp(2rem,5vw,3.5rem);margin:8px 0}
+header a{color:white}main{max-width:1100px;margin:auto;padding:24px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px}
+.card,section{background:white;border:1px solid var(--line);border-radius:9px;padding:20px;margin-bottom:17px}
+.card{margin:0}.value{font-size:2rem;font-weight:700;color:var(--green)}.label{color:var(--muted)}
+table{width:100%;border-collapse:collapse}th,td{padding:9px;text-align:left;border-bottom:1px solid var(--line)}th:nth-child(n+2),td:nth-child(n+2){text-align:right}
+.tablewrap{overflow-x:auto}.bar{height:11px;background:#e7ede8;border-radius:8px;overflow:hidden}.bar span{display:block;height:100%;background:#a53d3b}
+.note{color:var(--muted);font-size:.9rem}footer{text-align:center;padding:28px;color:var(--muted)}
+</style></head><body>
+<header><a href="./">← Corpus Xavante</a><h1>Estatísticas do corpus</h1><p>Indicadores calculados a partir dos dados públicos da versão disponível.</p></header>
+<main><p id="status" role="status">Carregando dados…</p>
+<div id="cards" class="grid" aria-live="polite"></div>
+<section><h2>Distribuição por obra</h2><div class="tablewrap"><table><thead><tr><th>Obra</th><th>Unidades</th><th>Palavras xavantes</th><th>Tipos</th></tr></thead><tbody id="obras"></tbody></table></div></section>
+<section><h2>Formas mais frequentes</h2><div class="tablewrap"><table><thead><tr><th>Forma</th><th>Ocorrências</th><th>Frequência relativa</th></tr></thead><tbody id="freq"></tbody></table></div><p class="note">Contagem ortográfica de formas superficiais; não corresponde a lemas ou morfemas.</p></section>
+<section><h2>Critérios de contagem</h2><p>Uma unidade é um registro do arquivo público <code>leitura/dados.json</code>; não é necessariamente uma frase. Tokens são sequências de letras Unicode, admitindo apóstrofo e hífen internos. Tipos são formas distintas, sem distinção de maiúsculas/minúsculas. A pontuação não é contabilizada. O léxico conta entradas, não necessariamente lemas únicos. Traduções ausentes são registros cujo campo português está vazio.</p><p class="note">Os números mudam automaticamente quando o arquivo público é atualizado. Estes indicadores não medem cobertura de anotação morfossintática nem qualidade de alinhamento.</p></section>
+</main><footer>Corpus Xavante (CorXav) · <a href="./leitura/">Leitura</a></footer>
+<script>
+const $=id=>document.getElementById(id), fmt=n=>new Intl.NumberFormat('pt-BR').format(n);
+const tokens=s=>String(s||'').match(/[\p{L}\p{M}]+(?:['’\-][\p{L}\p{M}]+)*/gu)||[];
+const norm=s=>s.toLocaleLowerCase('pt-BR').replace(/’/g,"'");
+function cell(row,text){const td=document.createElement('td');td.textContent=text;row.append(td)}
+function metric(name,n){const d=document.createElement('div');d.className='card';const v=document.createElement('div');v.className='value';v.textContent=fmt(n);const l=document.createElement('div');l.className='label';l.textContent=name;d.append(v,l);$('cards').append(d)}
+fetch('./leitura/dados.json').then(r=>{if(!r.ok)throw Error('HTTP '+r.status);return r.json()}).then(data=>{
+ const texts=Array.isArray(data.textos)?data.textos:[],lex=Array.isArray(data.lexico)?data.lexico:[];
+ const groups=new Map(),global=new Map();let total=0,translated=0;
+ for(const t of texts){
+   const obra=String(t.obra||'Sem identificação'),ws=tokens(t.xav),por=String(t.por||'').trim();
+   if(por)translated++;
+   if(!groups.has(obra))groups.set(obra,{units:0,count:0,types:new Set()});
+   const g=groups.get(obra);g.units++;
+   for(const w of ws){const key=norm(w);total++;g.count++;g.types.add(key);global.set(key,(global.get(key)||0)+1)}
+ }
+ metric('Unidades textuais',texts.length);metric('Obras',groups.size);metric('Tokens xavantes',total);metric('Tipos xavantes',global.size);metric('Registros com português',translated);metric('Entradas lexicais',lex.length);
+ const sorted=[...groups].sort((a,b)=>b[1].units-a[1].units);
+ for(const [name,g] of sorted){const tr=document.createElement('tr');cell(tr,name);cell(tr,fmt(g.units));cell(tr,fmt(g.count));cell(tr,fmt(g.types.size));$('obras').append(tr)}
+ for(const [form,count] of [...global].sort((a,b)=>b[1]-a[1]||a[0].localeCompare(b[0])).slice(0,30)){
+  const tr=document.createElement('tr');cell(tr,form);cell(tr,fmt(count));
+  const td=document.createElement('td'),bar=document.createElement('div');bar.className='bar';const span=document.createElement('span');span.style.width=(100*count/Math.max(1,total)).toFixed(2)+'%';bar.append(span);td.append(document.createTextNode((100*count/Math.max(1,total)).toFixed(2)+'% '),bar);tr.append(td);$('freq').append(tr)
+ }
+ $('status').textContent='Dados carregados · '+fmt(texts.length)+' unidades.';
+}).catch(e=>{$('status').textContent='Não foi possível carregar os dados públicos: '+e.message});
+</script></body></html>
