@@ -27,7 +27,7 @@ const tokens=s=>String(s||'').match(/[\p{L}\p{M}]+(?:['’\-][\p{L}\p{M}]+)*/gu)
 const norm=s=>s.toLocaleLowerCase('pt-BR').replace(/’/g,"'");
 function cell(row,text){const td=document.createElement('td');td.textContent=text;row.append(td)}
 function metric(name,n){const d=document.createElement('div');d.className='card';const v=document.createElement('div');v.className='value';v.textContent=fmt(n);const l=document.createElement('div');l.className='label';l.textContent=name;d.append(v,l);$('cards').append(d)}
-fetch('./leitura/dados.json').then(r=>{if(!r.ok)throw Error('HTTP '+r.status);return r.json()}).then(data=>{
+Promise.all([fetch('./leitura/dados.json').then(r=>{if(!r.ok)throw Error('HTTP '+r.status);return r.json()}),fetch('./leitura/historinha_cultura_xavante_2026.json').then(r=>{if(!r.ok)throw Error('HTTP '+r.status);return r.json()})]).then(([data,extra])=>{data.textos=[...data.textos,...extra.textos];
  const texts=Array.isArray(data.textos)?data.textos:[],lex=Array.isArray(data.lexico)?data.lexico:[];
  const groups=new Map(),global=new Map();let total=0,translated=0;
  for(const t of texts){
